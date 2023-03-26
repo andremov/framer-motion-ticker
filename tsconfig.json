@@ -25,6 +25,6 @@
     "downlevelIteration": true,
     "declarationMap": false
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }
