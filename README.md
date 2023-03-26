@@ -2,6 +2,16 @@
 
 A simple ticker made with `framer-motion`. Infinitely and seamlessly scroll through elements.
 
+[![NPM Version][npm-version-image]][npm-url]
+[![NPM Install Size][npm-install-size-image]][npm-install-size-url]
+[![NPM Downloads][npm-downloads-image]][npm-downloads-url]
+
+# Installation
+
+```
+npm install framer-motion-ticker
+```
+
 ## Basic Usage
 
 ```jsx
@@ -31,29 +41,29 @@ function App() {
 export default App;
 ```
 
-## Example
+## Examples
 
 [Live Demo](https://framer-motion-ticker-example.netlify.app/)
 
-[example repo](https://github.com/jiangbo2015/framer-motion-carousel/tree/main/example)
+[example repo](https://github.com/andremov/framer-motion-ticker/tree/main/example)
 
-![example](https://cdn.jsdelivr.net/gh/jiangbo2015/framer-motion-carousel/img.jpg)
+## Ticker props
 
-## props
+| props    | type   | default | description             |
+| -------- | ------ | ------- | ----------------------- |
+| duration | number | 10      | duration of one segment |
 
-| props            | type                                                                                 | default | description                                        |
-| ---------------- | ------------------------------------------------------------------------------------ | ------- | -------------------------------------------------- |
-| loop             | boolean                                                                              | true    | loop play                                          |
-| autoPlay         | boolean                                                                              | true    | auto play                                          |
-| interval         | number                                                                               | 2000    | auto play interval                                 |
-| renderArrowLeft  | ({handlePrev: () => void, activeIndex: number}) => React.ReactNode                   | null    | custom your arrows, `activeIndex` is current index |
-| renderArrowRight | ({handleNext: () => void, activeIndex: number}) => React.ReactNode                   | null    | custom your arrows, `activeIndex` is current index |
-| renderDots       | ({activeIndex: number, setActiveIndex: (index: number) => void;}) => React.ReactNode | null    | custom your dots, `activeIndex` is current index   |
-
-## example
+## Using the Ticker example folder
 
 ```
-cd example && yarn install
+cd example && npm install
 
-yarn dev
+npm run dev
 ```
+
+[npm-downloads-image]: https://badgen.net/npm/dm/framer-motion-ticker
+[npm-downloads-url]: https://npmcharts.com/compare/framer-motion-ticker?minimal=true
+[npm-install-size-image]: https://badgen.net/packagephobia/install/framer-motion-ticker
+[npm-install-size-url]: https://packagephobia.com/result?p=framer-motion-ticker
+[npm-url]: https://npmjs.org/package/framer-motion-ticker
+[npm-version-image]: https://badgen.net/npm/v/framer-motion-ticker
