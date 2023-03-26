@@ -1,13 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import TickerProps from './types';
-import './ticker.css';
+import { v4 as uuidv4 } from 'uuid';
+import './styles.css';
 
-const Ticker = ({ children, duration = 10 }: TickerProps) => {
+export const Ticker = ({ children, duration = 10 }: TickerProps) => {
   const tickerRef = React.useRef<HTMLDivElement>(null);
-
+  const [tickerUUID, setTickerUUID] = React.useState<string>('');
   const [tickerContentWidth, setTickerContentWidth] = React.useState<number>(2);
   const [numDupes, setNumDupes] = React.useState<number>(1);
+
+  React.useEffect(() => {
+    setTickerUUID(uuidv4());
+  }, []);
 
   React.useEffect(() => {
     let contentWidth = 0;
@@ -48,5 +53,3 @@ const Ticker = ({ children, duration = 10 }: TickerProps) => {
     </div>
   );
 };
-
-export default Ticker;
