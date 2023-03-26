@@ -1,8 +1,8 @@
 {
   "name": "framer-motion-ticker",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A React component that acts like a ticker, or marquee.",
-  "author": "amovilla1103@gmail.com",
+  "author": "Andres Movilla <amovilla1103@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
