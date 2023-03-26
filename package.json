@@ -1,11 +1,26 @@
 {
   "name": "framer-motion-ticker",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A React component that acts like a ticker, or marquee.",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
-  "typings": "dist/types/index.d.ts",
+  "author": "amovilla1103@gmail.com",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andremov/framer-motion-ticker"
+  },
+  "bugs": {
+    "url": "https://github.com/andremov/framer-motion-ticker/issues"
+  },
+  "homepage": "https://github.com/andremov/framer-motion-ticker#readme",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "start": "nodemon --watch . --exec npm run build -e ts,tsx",
+    "build": "npm run build:esm & npm run build:cjs & npm run build:types",
+    "build:esm": "cross-env BABEL_ENV=esm babel src --extensions .ts,.tsx -d dist/esm",
+    "build:cjs": "cross-env BABEL_ENV=cjs babel src --root-mode upward --extensions .ts,.tsx -d dist/cjs",
+    "build:types": "tsc --emitDeclarationOnly --declaration --declarationDir dist/types",
+    "pub": "npm run build && npm publish"
+  },
   "dependencies": {
     "framer-motion": "^10.9.1"
   },
@@ -20,27 +35,20 @@
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.36.0",
     "esm": "^3.2.25",
+    "nodemon": "^2.0.22",
     "prettier": "^2.8.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rimraf": "^3.0.2",
     "typescript": "^5.0.2"
   },
-  "scripts": {
-    "prebuild": "rimraf dist",
-    "start": "node --watch src --exec yarn build -e ts,tsx",
-    "build": "yarn build:esm & yarn build:cjs & yarn build:types",
-    "build:esm": "cross-env BABEL_ENV=esm babel src --extensions .ts,.tsx -d dist/esm",
-    "build:cjs": "cross-env BABEL_ENV=cjs babel src --root-mode upward --extensions .ts,.tsx -d dist/cjs",
-    "build:types": "tsc --emitDeclarationOnly --declaration --declarationDir dist/types",
-    "pub": "yarn build && npm publish"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/andremov/framer-motion-ticker"
-  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "typings": "dist/types/index.d.ts",
   "keywords": [
     "framer",
     "motion",
@@ -51,11 +59,5 @@
     "component",
     "image gallery",
     "framer motion"
-  ],
-  "author": "amovilla1103@gmail.com",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/andremov/framer-motion-ticker/issues"
-  },
-  "homepage": "https://github.com/andremov/framer-motion-ticker#readme"
+  ]
 }

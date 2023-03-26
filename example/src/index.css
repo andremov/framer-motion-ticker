@@ -1,0 +1,113 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+#root {
+  width: 100vw;
+  margin: 0 auto;
+  text-align: center;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  height: 100vh;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+.media-card {
+  box-shadow: 0 0 5px -2px rgba(255, 255, 255, 1);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  color: white;
+
+  width: var(--card-width);
+  height: calc(var(--card-width) * 1.5);
+  display: flex;
+  position: relative;
+  margin: 1rem;
+  user-select: none;
+  cursor: pointer;
+}
+
+.media-card__wide {
+  width: calc(var(--card-height) * 2);
+  height: var(--card-height);
+}
+
+.media-card__wide .media-card__title {
+  font-size: 2rem;
+}
+
+.media-card:hover {
+  box-shadow: 0 0 5px -1px rgba(255, 255, 255, 1);
+}
+  
+.media-card:hover .media-card__background{
+  transform: scale(1.1);
+}
+  
+.media-card:hover .media-card__foreground{
+  backdrop-filter: blur(3px);
+  background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0.75));
+}
+
+.media-card:hover .media-card__title{
+  opacity: 1;
+}
+
+.media-card__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: transform 0.2s;
+  transform: scale(1.0);
+}
+
+.media-card__foreground {
+  z-index: 1;
+  height: inherit;
+  width: inherit;
+  padding: 2rem 0.5rem;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(0px);
+  transition: backdrop-filter 0.4s;
+  background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0.1));
+}
+
+.media-card__title {
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
