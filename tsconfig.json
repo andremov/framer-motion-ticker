@@ -6,6 +6,7 @@
     "moduleResolution": "node",
     "skipLibCheck": true,
     "strict": true,
+    "types": ["node"],
     "jsx": "react",
     "esModuleInterop": true,
     "resolveJsonModule": true,
@@ -26,5 +27,5 @@
     "declarationMap": false
   },
   "include": ["src"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "example"]
 }

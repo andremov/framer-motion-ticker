@@ -1,6 +1,6 @@
 {
   "name": "framer-motion-ticker",
-  "version": "1.0.5",
+  "version": "1.0.13",
   "description": "A React component that acts like a ticker, or marquee.",
   "author": "Andres Movilla <amovilla1103@gmail.com>",
   "license": "MIT",
@@ -13,12 +13,12 @@
   },
   "homepage": "https://github.com/andremov/framer-motion-ticker#readme",
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "start": "nodemon --watch . --exec npm run build -e ts,tsx",
     "build": "npm run build:esm & npm run build:cjs & npm run build:types",
-    "build:esm": "cross-env BABEL_ENV=esm babel src --extensions .ts,.tsx -d dist/esm",
-    "build:cjs": "cross-env BABEL_ENV=cjs babel src --root-mode upward --extensions .ts,.tsx -d dist/cjs",
-    "build:types": "tsc --emitDeclarationOnly --declaration --declarationDir dist/types",
+    "build:esm": "cross-env BABEL_ENV=esm babel src --extensions .tsx -o dist/index.mjs",
+    "build:cjs": "cross-env BABEL_ENV=cjs babel src --root-mode upward --extensions .tsx -o dist/index.js",
+    "build:types": "tsc --emitDeclarationOnly --declaration --declarationDir dist",
     "pub": "npm run build && npm publish"
   },
   "dependencies": {
@@ -47,10 +47,22 @@
     "rimraf": "^3.0.2",
     "typescript": "^5.0.2"
   },
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
-  "typings": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "esm": {
+    "mode": "auto"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "keywords": [
     "framer",
     "motion",
