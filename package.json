@@ -1,6 +1,6 @@
 {
   "name": "framer-motion-ticker",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "A React component that acts like a ticker, or marquee.",
   "author": "Andres Movilla <amovilla1103@gmail.com>",
   "license": "MIT",
@@ -18,8 +18,8 @@
     "build": "npm run build:esm & npm run build:cjs & npm run build:types",
     "build:esm": "cross-env BABEL_ENV=esm babel src --extensions .tsx -o dist/index.mjs",
     "build:cjs": "cross-env BABEL_ENV=cjs babel src --root-mode upward --extensions .tsx -o dist/index.js",
-    "build:types": "tsc --emitDeclarationOnly --declaration --declarationDir dist",
-    "pub": "npm run build && rimraf tsconfig.tsbuildinfo && npm publish"
+    "build:types": "tsc --emitDeclarationOnly --declaration --declarationDir dist && rimraf tsconfig.tsbuildinfo",
+    "pub": "npm run build && npm publish"
   },
   "dependencies": {
     "framer-motion": "^10.9.1",
