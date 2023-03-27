@@ -15,7 +15,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "start": "nodemon --watch . --exec npm run build -e ts,tsx",
-    "build": "npm run build:esm & npm run build:cjs & npm run build:types",
+    "build": "npm run build:esm && npm run build:cjs && npm run build:types",
     "build:esm": "cross-env BABEL_ENV=esm babel src --extensions .tsx -o dist/index.mjs",
     "build:cjs": "cross-env BABEL_ENV=cjs babel src --root-mode upward --extensions .tsx -o dist/index.js",
     "build:types": "tsc --emitDeclarationOnly --declaration --declarationDir dist && rimraf tsconfig.tsbuildinfo",
