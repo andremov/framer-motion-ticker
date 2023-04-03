@@ -1,14 +1,39 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { AnimationPlaybackControls, useAnimate, useInView } from 'framer-motion';
 import { v4 as uuidv4 } from 'uuid';
 
-type TickerProps = { children: JSX.Element[]; duration?: number };
+const TICKER_DIRECTION_LEFT = -1;
+const TICKER_DIRECTION_RIGHT = 1;
 
-const Ticker: React.FunctionComponent<TickerProps> = ({ children, duration = 10 }: TickerProps) => {
+type TickerProps = {
+  children: JSX.Element[];
+  duration?: number;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  isPlaying?: boolean;
+  direction?: number;
+};
+
+const noop = () => {};
+
+const Ticker: React.FunctionComponent<TickerProps> = (props: TickerProps) => {
+  const {
+    children,
+    duration = 10,
+    onMouseEnter = noop,
+    onMouseLeave = noop,
+    isPlaying = true,
+    direction = TICKER_DIRECTION_LEFT,
+  } = props;
   const tickerRef = React.useRef<HTMLDivElement>(null);
   const [tickerUUID, setTickerUUID] = React.useState<string>('');
   const [tickerContentWidth, setTickerContentWidth] = React.useState<number>(2);
   const [numDupes, setNumDupes] = React.useState<number>(1);
+  const [scope, animate] = useAnimate();
+  const [animationControls, setAnimationControls] = React.useState<
+    AnimationPlaybackControls | undefined
+  >(undefined);
+  const isInView = useInView(scope);
 
   React.useEffect(() => {
     setTickerUUID(uuidv4());
@@ -33,6 +58,28 @@ const Ticker: React.FunctionComponent<TickerProps> = ({ children, duration = 10 
     }
   }, [tickerRef.current, tickerContentWidth]);
 
+  React.useEffect(() => {
+    if (isInView && !animationControls) {
+      const controls = animate(
+        scope.current,
+        { x: tickerContentWidth * direction },
+        { ease: 'linear', duration, repeat: Infinity }
+      );
+      controls.play();
+      setAnimationControls(controls);
+    }
+  }, [isInView]);
+
+  React.useEffect(() => {
+    if (animationControls) {
+      if (!isInView || !isPlaying) {
+        animationControls.pause();
+      } else {
+        animationControls.play();
+      }
+    }
+  }, [isInView, isPlaying]);
+
   return (
     <div
       className="FMT__container"
@@ -42,12 +89,15 @@ const Ticker: React.FunctionComponent<TickerProps> = ({ children, duration = 10 
         height: '100%',
         overflow: 'hidden',
       }}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
-      <motion.div
+      <div
+        ref={scope}
         className="FMT__container__contents"
-        initial={false}
-        animate={{ x: -tickerContentWidth }}
-        transition={{ ease: 'linear', duration, repeat: Infinity }}
+        // initial={false}
+        // animate={{ x: tickerContentWidth * direction }}
+        // transition={{ ease: 'linear', duration, repeat: Infinity }}
         style={{ display: 'flex' }}
       >
         {children.map((item, index) => (
@@ -58,9 +108,11 @@ const Ticker: React.FunctionComponent<TickerProps> = ({ children, duration = 10 
         {[...Array(numDupes)].map((_) =>
           children.map((item, index) => <div key={index}>{item}</div>)
         )}
-      </motion.div>
+      </div>
     </div>
   );
 };
 
 export default Ticker;
+
+export { TICKER_DIRECTION_LEFT, TICKER_DIRECTION_RIGHT };
