@@ -27,7 +27,7 @@ const Ticker: React.FunctionComponent<TickerProps> = (props: TickerProps) => {
   } = props;
   const tickerRef = React.useRef<HTMLDivElement>(null);
   const [tickerUUID, setTickerUUID] = React.useState<string>('');
-  const [tickerContentWidth, setTickerContentWidth] = React.useState<number>(2);
+  const [tickerContentWidth, setTickerContentWidth] = React.useState<number | null>(0);
   const [numDupes, setNumDupes] = React.useState<number>(1);
   const [scope, animate] = useAnimate();
   const [animationControls, setAnimationControls] = React.useState<
@@ -62,7 +62,7 @@ const Ticker: React.FunctionComponent<TickerProps> = (props: TickerProps) => {
     if (isInView && !animationControls) {
       const controls = animate(
         scope.current,
-        { x: tickerContentWidth * direction },
+        { x: tickerContentWidth ? tickerContentWidth * direction : 0 },
         { ease: 'linear', duration, repeat: Infinity }
       );
       controls.play();
