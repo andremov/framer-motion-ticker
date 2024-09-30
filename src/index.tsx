@@ -62,7 +62,10 @@ const Ticker: React.FunctionComponent<TickerProps> = (props: TickerProps) => {
     if (isInView && !animationControls) {
       const controls = animate(
         scope.current,
-        { x: tickerContentWidth ? tickerContentWidth * direction : 0 },
+        {
+          transform: `translateX(${tickerContentWidth ? tickerContentWidth * direction : 0}px)`, 
+          //x: tickerContentWidth ? tickerContentWidth * direction : 0 
+        },
         { ease: 'linear', duration, repeat: Infinity }
       );
       controls.play();
