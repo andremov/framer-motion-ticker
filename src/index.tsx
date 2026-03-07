@@ -64,6 +64,7 @@ const Ticker: React.FunctionComponent<TickerProps> = (props: TickerProps) => {
     if (tickerEl && tickerContentsEl) {
       const measure = () => {
         const contentWidth = tickerContentsEl.getBoundingClientRect().width;
+        if (contentWidth === 0) return;
         setTickerContentWidth(contentWidth);
         setNumDupes(Math.max(Math.ceil((2 * tickerEl.clientWidth) / contentWidth), 1));
       };
