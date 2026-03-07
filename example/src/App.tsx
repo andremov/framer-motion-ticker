@@ -1,4 +1,5 @@
-import Ticker from 'framer-motion-ticker';
+import Ticker from '../../src/index';
+// import Ticker from 'framer-motion-ticker';
 import React from 'react';
 
 function App() {

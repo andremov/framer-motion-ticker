@@ -13,7 +13,6 @@
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "incremental": true,
     "noUncheckedIndexedAccess": true,
     "declaration": true,
     "sourceMap": true,

@@ -13,36 +13,27 @@
   },
   "homepage": "https://github.com/andremov/framer-motion-ticker#readme",
   "scripts": {
-    "prebuild": "rimraf dist",
-    "start": "nodemon --watch . --exec npm run build -e ts,tsx",
-    "build": "npm run build:esm && npm run build:cjs && npm run build:types",
-    "build:esm": "cross-env BABEL_ENV=esm babel src --extensions .tsx -o dist/index.mjs",
-    "build:cjs": "cross-env BABEL_ENV=cjs babel src --root-mode upward --extensions .tsx -o dist/index.js",
-    "build:types": "tsc --emitDeclarationOnly --declaration --declarationDir dist && rimraf tsconfig.tsbuildinfo",
+    "build": "tsup",
+    "start": "tsup --watch",
     "pub": "npm run build && npm publish"
   },
-  "dependencies": {
-    "framer-motion": "^10.9.1"
+  "peerDependencies": {
+    "framer-motion": ">=10.0.0",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.15.7",
-    "@babel/core": "^7.15.8",
-    "@babel/preset-env": "^7.15.8",
-    "@babel/preset-react": "^7.14.5",
-    "@babel/preset-typescript": "^7.15.0",
     "@types/node": "^18.15.10",
     "@types/react": "^18.0.29",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
-    "cross-env": "^7.0.3",
     "eslint": "^8.36.0",
-    "esm": "^3.2.25",
-    "nodemon": "^2.0.22",
+    "framer-motion": "^11.0.0",
     "prettier": "^2.8.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "rimraf": "^3.0.2",
+    "tsup": "^8.0.0",
     "typescript": "^5.0.2"
   },
   "exports": {
@@ -54,13 +45,9 @@
     },
     "./package.json": "./package.json"
   },
-  "esm": {
-    "mode": "auto"
-  },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
   "keywords": [
     "framer",
     "motion",

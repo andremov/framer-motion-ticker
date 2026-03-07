@@ -5,12 +5,12 @@ const TICKER_DIRECTION_LEFT = -1;
 const TICKER_DIRECTION_RIGHT = 1;
 
 type TickerProps = {
-  children: JSX.Element[];
+  children: React.ReactElement[];
   duration?: number;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   isPlaying?: boolean;
-  direction?: number;
+  direction?: -1 | 1;
 };
 
 const noop = () => {};
@@ -25,8 +25,8 @@ const Ticker: React.FunctionComponent<TickerProps> = (props: TickerProps) => {
     direction = TICKER_DIRECTION_LEFT,
   } = props;
 
-  const tickerRef = React.useRef<HTMLDivElement>(null);
-  const tickerContentsRef = React.useRef<HTMLDivElement>(null);
+  const [tickerEl, setTickerEl] = React.useState<HTMLDivElement | null>(null);
+  const [tickerContentsEl, setTickerContentsEl] = React.useState<HTMLDivElement | null>(null);
 
   const [tickerContentWidth, setTickerContentWidth] = React.useState<number>(2);
   const [numDupes, setNumDupes] = React.useState<number>(1);
@@ -38,24 +38,38 @@ const Ticker: React.FunctionComponent<TickerProps> = (props: TickerProps) => {
   const isInView = useInView(scope);
 
   React.useEffect(() => {
-    if (tickerRef.current && tickerContentsRef.current) {
-      const contentWidth = tickerContentsRef.current.getBoundingClientRect().width;
-      setTickerContentWidth(contentWidth);
-      setNumDupes(Math.max(Math.ceil((2 * tickerRef.current.clientWidth) / contentWidth), 1));
+    if (tickerEl && tickerContentsEl) {
+      const measure = () => {
+        const contentWidth = tickerContentsEl.getBoundingClientRect().width;
+        setTickerContentWidth(contentWidth);
+        setNumDupes(Math.max(Math.ceil((2 * tickerEl.clientWidth) / contentWidth), 1));
+      };
+
+      measure();
+
+      const observer = new ResizeObserver(measure);
+      observer.observe(tickerEl);
+
+      return () => observer.disconnect();
     }
-  }, [tickerRef.current, tickerContentsRef.current]);
+  }, [tickerEl, tickerContentsEl]);
 
   React.useEffect(() => {
-    if (isInView && !animationControls) {
+    if (isInView && tickerContentWidth > 2) {
+      if (animationControls) {
+        animationControls.stop();
+      }
       const controls = animate(
         scope.current,
         { x: tickerContentWidth * direction },
         { ease: 'linear', duration, repeat: Infinity }
       );
-      controls.play();
+      if (!isPlaying) {
+        controls.pause();
+      }
       setAnimationControls(controls);
     }
-  }, [isInView]);
+  }, [isInView, tickerContentWidth, direction, duration]);
 
   React.useEffect(() => {
     if (animationControls) {
@@ -70,7 +84,7 @@ const Ticker: React.FunctionComponent<TickerProps> = (props: TickerProps) => {
   return (
     <div
       className="FMT__container"
-      ref={tickerRef}
+      ref={setTickerEl}
       style={{
         width: '100%',
         height: '100%',
@@ -93,7 +107,7 @@ const Ticker: React.FunctionComponent<TickerProps> = (props: TickerProps) => {
             children.map((item, index) => <React.Fragment key={index}>{item}</React.Fragment>)
           )}
         </div>
-        <div ref={tickerContentsRef} style={{ display: 'flex' }}>
+        <div ref={setTickerContentsEl} style={{ display: 'flex' }}>
           {children.map((item, index) => (
             <React.Fragment key={index}>{item}</React.Fragment>
           ))}

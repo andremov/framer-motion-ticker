@@ -6,6 +6,8 @@ A simple ticker made with `framer-motion`. Infinitely and seamlessly scroll thro
 [![NPM Install Size][npm-install-size-image]][npm-install-size-url]
 [![NPM Downloads][npm-downloads-image]][npm-downloads-url]
 
+Not using `framer-motion`? Check out [`@andremov/react-ticker`](https://www.npmjs.com/package/@andremov/react-ticker) — the same ticker without the framer-motion dependency.
+
 # Installation
 
 ```
@@ -49,9 +51,13 @@ export default App;
 
 ## Ticker props
 
-| props    | type   | default | description             |
-| -------- | ------ | ------- | ----------------------- |
-| duration | number | 10      | duration of one segment |
+| props        | type         | default | description                            |
+| ------------ | ------------ | ------- | -------------------------------------- |
+| duration     | number       | 10      | Duration of one animation cycle        |
+| direction    | -1 \| 1      | -1      | Scroll direction (-1 left, 1 right)    |
+| isPlaying    | boolean      | true    | Whether the ticker is playing          |
+| onMouseEnter | () => void   | noop    | Callback when mouse enters the ticker  |
+| onMouseLeave | () => void   | noop    | Callback when mouse leaves the ticker  |
 
 ## Using the Ticker example folder
 
