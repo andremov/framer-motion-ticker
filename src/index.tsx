@@ -5,12 +5,14 @@ const TICKER_DIRECTION_LEFT = -1;
 const TICKER_DIRECTION_RIGHT = 1;
 
 type TickerProps = {
-  children: React.ReactElement[];
+  children: React.ReactNode;
   duration?: number;
+  direction?: -1 | 1 | 'left' | 'right';
+  isPlaying?: boolean;
+  pauseOnHover?: boolean;
+  gap?: number;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
-  isPlaying?: boolean;
-  direction?: -1 | 1;
 };
 
 const noop = () => {};
@@ -19,10 +21,12 @@ const Ticker: React.FunctionComponent<TickerProps> = (props: TickerProps) => {
   const {
     children,
     duration = 10,
+    direction = 'left',
+    isPlaying = true,
+    pauseOnHover = false,
+    gap = 0,
     onMouseEnter = noop,
     onMouseLeave = noop,
-    isPlaying = true,
-    direction = TICKER_DIRECTION_LEFT,
   } = props;
 
   const [tickerEl, setTickerEl] = React.useState<HTMLDivElement | null>(null);
@@ -30,12 +34,31 @@ const Ticker: React.FunctionComponent<TickerProps> = (props: TickerProps) => {
 
   const [tickerContentWidth, setTickerContentWidth] = React.useState<number>(2);
   const [numDupes, setNumDupes] = React.useState<number>(1);
+  const [isHovered, setIsHovered] = React.useState<boolean>(false);
 
   const [scope, animate] = useAnimate();
   const [animationControls, setAnimationControls] = React.useState<
     AnimationPlaybackControls | undefined
   >(undefined);
   const isInView = useInView(scope);
+
+  const [prefersReducedMotion, setPrefersReducedMotion] = React.useState<boolean>(false);
+
+  const childArray = React.Children.toArray(children);
+
+  const directionMultiplier =
+    direction === 'left' || direction === TICKER_DIRECTION_LEFT
+      ? TICKER_DIRECTION_LEFT
+      : TICKER_DIRECTION_RIGHT;
+
+  React.useEffect(() => {
+    const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mql.matches);
+
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, []);
 
   React.useEffect(() => {
     if (tickerEl && tickerContentsEl) {
@@ -49,6 +72,7 @@ const Ticker: React.FunctionComponent<TickerProps> = (props: TickerProps) => {
 
       const observer = new ResizeObserver(measure);
       observer.observe(tickerEl);
+      observer.observe(tickerContentsEl);
 
       return () => observer.disconnect();
     }
@@ -61,25 +85,35 @@ const Ticker: React.FunctionComponent<TickerProps> = (props: TickerProps) => {
       }
       const controls = animate(
         scope.current,
-        { x: tickerContentWidth * direction },
+        { x: tickerContentWidth * directionMultiplier },
         { ease: 'linear', duration, repeat: Infinity }
       );
-      if (!isPlaying) {
+      if (!isPlaying || prefersReducedMotion) {
         controls.pause();
       }
       setAnimationControls(controls);
     }
-  }, [isInView, tickerContentWidth, direction, duration]);
+  }, [isInView, tickerContentWidth, directionMultiplier, duration]);
 
   React.useEffect(() => {
     if (animationControls) {
-      if (!isInView || !isPlaying) {
+      if (!isInView || !isPlaying || (pauseOnHover && isHovered) || prefersReducedMotion) {
         animationControls.pause();
       } else {
         animationControls.play();
       }
     }
-  }, [isInView, isPlaying]);
+  }, [isInView, isPlaying, isHovered, pauseOnHover, prefersReducedMotion]);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    onMouseEnter();
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    onMouseLeave();
+  };
 
   return (
     <div
@@ -90,8 +124,8 @@ const Ticker: React.FunctionComponent<TickerProps> = (props: TickerProps) => {
         height: '100%',
         overflow: 'hidden',
       }}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div
         ref={scope}
@@ -99,22 +133,23 @@ const Ticker: React.FunctionComponent<TickerProps> = (props: TickerProps) => {
         style={{
           display: 'flex',
           width: 'max-content',
+          gap: gap + 'px',
           marginLeft: `-${tickerContentWidth * numDupes}px`,
         }}
       >
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', gap: gap + 'px' }}>
           {[...Array(numDupes)].map((_) =>
-            children.map((item, index) => <React.Fragment key={index}>{item}</React.Fragment>)
+            childArray.map((item, index) => <React.Fragment key={index}>{item}</React.Fragment>)
           )}
         </div>
-        <div ref={setTickerContentsEl} style={{ display: 'flex' }}>
-          {children.map((item, index) => (
+        <div ref={setTickerContentsEl} style={{ display: 'flex', gap: gap + 'px' }}>
+          {childArray.map((item, index) => (
             <React.Fragment key={index}>{item}</React.Fragment>
           ))}
         </div>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', gap: gap + 'px' }}>
           {[...Array(numDupes)].map((_) =>
-            children.map((item, index) => <React.Fragment key={index}>{item}</React.Fragment>)
+            childArray.map((item, index) => <React.Fragment key={index}>{item}</React.Fragment>)
           )}
         </div>
       </div>
